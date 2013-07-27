@@ -7,7 +7,6 @@ module Settings
 import Data.Text as Text
 import Data.Text ()
 import Data.ByteString as ByteString
-import System.IO (FilePath)
 import Control.Applicative
   ( (<$>)
   , (<*>) )
