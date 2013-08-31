@@ -55,4 +55,4 @@ instance FromJSON Verb where
   parseJSON (String s) = return $ read $ Text.unpack s
 
 withKey :: ApiKey -> String -> String
-withKey apiKey = (++) ("?key=" ++ apiKey)
+withKey apiKey url = url ++ "?key=" ++ apiKey
