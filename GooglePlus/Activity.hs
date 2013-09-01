@@ -9,9 +9,6 @@ where
 
 import Data.Text as Text
 import Data.Text ()
-import Control.Applicative
-  ( (<$>)
-  , (<*>) )
 
 import Data.ByteString.Lazy as BSL
 import Data.Time.Clock (UTCTime)
