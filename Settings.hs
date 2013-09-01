@@ -15,8 +15,8 @@ import Data.Yaml
 
 data Settings =
   Settings
-  { userId :: Text
-  , apiKey :: Text } deriving Show
+  { userId :: String
+  , apiKey :: String } deriving Show
 
 instance FromJSON Settings where
   parseJSON (Object o) =
