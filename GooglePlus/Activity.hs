@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module GooglePlus.Activity
-  (getPublicActivitiesList
-  ,getPublicActivity
+  ( getPublicActivitiesList
+  , getPublicActivity
   , Activity(..)
   , Verb(..) )
 where
