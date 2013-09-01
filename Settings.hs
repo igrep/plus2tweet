@@ -19,8 +19,10 @@ data Settings =
   , apiKey :: String } deriving Show
 
 instance FromJSON Settings where
-  parseJSON (Object o) =
-    Settings <$> o .: "userId" <*> o .: "apiKey"
+  parseJSON (Object o) = do
+    userId <- show <$> ( o .: "userId" :: Parser Integer )
+    apiKey <- o .: "apiKey"
+    return $ Settings userId apiKey
 
 loadSettings :: FilePath -> IO (Either String Settings)
 loadSettings fp = decodeEither <$> ByteString.readFile fp
