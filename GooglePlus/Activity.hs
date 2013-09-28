@@ -3,9 +3,10 @@
 module GooglePlus.Activity
   ( getPublicActivitiesList
   , getPublicActivity
-  , Activity(..)
   , ActivitiesList(..)
-  , Verb(..) )
+  , Activity(..)
+  , Verb(..)
+  , ActivityObject(..))
 where
 
 import Data.Text as Text
@@ -13,6 +14,7 @@ import Data.Text ()
 
 import Data.ByteString.Lazy as BSL
 import Data.Time.Clock (UTCTime)
+import Control.Applicative ( (<$>), (<*>) )
 
 import Data.Aeson
 import Network.HTTP.Conduit
@@ -42,14 +44,12 @@ instance FromJSON ActivitiesList where
     aItems         <- o .: "items"
     return $ ActivitiesList aNextPageToken aUpdated aItems
 
-
 data Activity = Activity
   { activityId :: Text
   , activityUrl :: Text
   , verb :: Verb
   , published :: UTCTime
-  , content :: Text
-  , originalContent :: Maybe Text }
+  , activityObject :: ActivityObject }
   deriving Show
 
 instance FromJSON Activity where
@@ -59,9 +59,17 @@ instance FromJSON Activity where
     aVerb            <- o .: "verb"
     aPublished       <- o .: "published"
     aObject          <- o .: "object"
-    aContent         <- aObject .: "content"
-    aOriginalContent <- aObject .:? "originalContent"
-    return $ Activity aId aUrl aVerb aPublished aContent aOriginalContent
+    return $ Activity aId aUrl aVerb aPublished aObject
+
+data ActivityObject = ActivityObject
+  { activityObjectId :: Text
+  , objectType :: Text
+  , content :: Text
+  , originalContent :: Maybe Text }
+  deriving ( Read, Show )
+
+instance FromJSON ActivityObject where
+  parseJSON (Object o) = ActivityObject <$> o .: "id" <*> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
 
 data Verb = Post | Share deriving (Read, Show)
 
