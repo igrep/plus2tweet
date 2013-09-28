@@ -48,7 +48,8 @@ data Activity = Activity
   , activityUrl :: Text
   , verb :: Verb
   , published :: UTCTime
-  , originalContent :: Text }
+  , content :: Text
+  , originalContent :: Maybe Text }
   deriving Show
 
 instance FromJSON Activity where
@@ -58,8 +59,9 @@ instance FromJSON Activity where
     aVerb            <- o .: "verb"
     aPublished       <- o .: "published"
     aObject          <- o .: "object"
-    aOriginalContent <- aObject .: "originalContent"
-    return $ Activity aId aUrl aVerb aPublished aOriginalContent
+    aContent         <- aObject .: "content"
+    aOriginalContent <- aObject .:? "originalContent"
+    return $ Activity aId aUrl aVerb aPublished aContent aOriginalContent
 
 data Verb = Post | Share deriving (Read, Show)
 
