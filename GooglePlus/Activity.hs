@@ -21,8 +21,8 @@ getPublicActivitiesList apiKey userId =
   simpleHttp $ withKey apiKey $ "https://www.googleapis.com/plus/v1/people/" ++ userId ++ "/activities/public"
 
 getPublicActivity :: ApiKey -> ActivityID -> IO BSL.ByteString
-getPublicActivity apiKey activityId =
-  simpleHttp $ withKey apiKey $ "https://www.googleapis.com/plus/v1/activities/" ++ activityId
+getPublicActivity aKey aId =
+  simpleHttp $ withKey aKey $ "https://www.googleapis.com/plus/v1/activities/" ++ aId
 
 type ApiKey = String
 type UserID = String
@@ -38,13 +38,13 @@ data Activity = Activity
 
 instance FromJSON Activity where
   parseJSON (Object o) = do
-    activityId      <- o .: "id"
-    activityUrl     <- o .: "url"
-    verb            <- o .: "verb"
-    published       <- o .: "published"
-    obj             <- o .: "object"
-    originalContent <- obj .: "originalContent"
-    return $ Activity activityId activityUrl verb published originalContent
+    aId              <- o .: "id"
+    aUrl             <- o .: "url"
+    aVerb            <- o .: "verb"
+    aPublished       <- o .: "published"
+    aObject          <- o .: "object"
+    aOriginalContent <- aObject .: "originalContent"
+    return $ Activity aId aUrl aVerb aPublished aOriginalContent
 
 data Verb = Post | Share deriving (Read, Show)
 
