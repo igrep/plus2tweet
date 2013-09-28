@@ -38,11 +38,10 @@ data ActivitiesList = ActivitiesList
   }
 
 instance FromJSON ActivitiesList where
-  parseJSON (Object o) = do
-    aNextPageToken <- o .: "nextPageToken"
-    aUpdated       <- o .: "updated"
-    aItems         <- o .: "items"
-    return $ ActivitiesList aNextPageToken aUpdated aItems
+  parseJSON (Object o) = ActivitiesList <$>
+    o .: "nextPageToken" <*>
+    o .: "updated"       <*>
+    o .: "items"
 
 data Activity = Activity
   { activityId :: Text
@@ -53,13 +52,12 @@ data Activity = Activity
   deriving Show
 
 instance FromJSON Activity where
-  parseJSON (Object o) = do
-    aId              <- o .: "id"
-    aUrl             <- o .: "url"
-    aVerb            <- o .: "verb"
-    aPublished       <- o .: "published"
-    aObject          <- o .: "object"
-    return $ Activity aId aUrl aVerb aPublished aObject
+  parseJSON (Object o) = Activity <$>
+    o .: "id"        <*>
+    o .: "url"       <*>
+    o .: "verb"      <*>
+    o .: "published" <*>
+    o .: "object"
 
 data ActivityObject = ActivityObject
   { activityObjectId :: Text
