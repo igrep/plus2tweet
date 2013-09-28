@@ -4,6 +4,7 @@ module GooglePlus.Activity
   ( getPublicActivitiesList
   , getPublicActivity
   , Activity(..)
+  , ActivitiesList(..)
   , Verb(..) )
 where
 
@@ -27,6 +28,20 @@ getPublicActivity aKey aId =
 type ApiKey = String
 type UserID = String
 type ActivityID = String
+
+data ActivitiesList = ActivitiesList
+  { nextPageToken :: Text
+  , updated :: UTCTime
+  , items :: [Activity]
+  }
+
+instance FromJSON ActivitiesList where
+  parseJSON (Object o) = do
+    aNextPageToken <- o .: "nextPageToken"
+    aUpdated       <- o .: "updated"
+    aItems         <- o .: "items"
+    return $ ActivitiesList aNextPageToken aUpdated aItems
+
 
 data Activity = Activity
   { activityId :: Text
