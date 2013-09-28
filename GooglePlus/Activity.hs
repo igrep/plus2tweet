@@ -35,7 +35,7 @@ data ActivitiesList = ActivitiesList
   { nextPageToken :: Text
   , updated :: UTCTime
   , items :: [Activity]
-  }
+  } deriving Show
 
 instance FromJSON ActivitiesList where
   parseJSON (Object o) = ActivitiesList <$>
