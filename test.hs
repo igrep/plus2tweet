@@ -24,6 +24,6 @@ tryDownload args = do
   getPublicActivitiesList aKey uId >>= BSL.putStr
 
 tryParseJSON :: [FilePath] -> IO ()
-tryParseJSON args = do
-  e <- eitherDecode <$> ( BSL.readFile $ head args ) :: IO ( Either String ActivitiesList )
-  print e
+tryParseJSON args =
+  print =<<
+    ( eitherDecode <$> ( BSL.readFile $ head args ) :: IO ( Either String ActivitiesList ) )
