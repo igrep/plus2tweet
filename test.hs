@@ -8,6 +8,8 @@ import Data.Aeson ( eitherDecode )
 import qualified Data.ByteString.Lazy as BSL
 import System.Environment ( getArgs )
 import Control.Applicative ( (<$>) )
+import qualified Data.Text.IO as TIO
+import Data.Text ( Text )
 
 main :: IO ()
 main = do
@@ -16,6 +18,8 @@ main = do
   where
     exec "dl" = tryDownload
     exec "parse" = tryParseJSON
+    exec "e-content" = tryExtractContentWith TIO.putStrLn
+    exec "e-content-show" = tryExtractContentWith print
     exec other = error $ "Undifiend command: " ++ other
 
 tryDownload :: [FilePath] -> IO ()
@@ -25,5 +29,14 @@ tryDownload args = do
 
 tryParseJSON :: [FilePath] -> IO ()
 tryParseJSON args =
-  print =<<
-    ( eitherDecode <$> ( BSL.readFile $ head args ) :: IO ( Either String ActivitiesList ) )
+  print =<< loadActivitiesList ( head args )
+
+tryExtractContentWith :: ( Text -> IO() ) -> [FilePath] -> IO ()
+tryExtractContentWith printer args =
+  mapM_ ( printer . content . activityObject ) =<< items <$> loadActivitiesList ( head args )
+
+loadActivitiesList :: FilePath -> IO ActivitiesList
+loadActivitiesList jsonPath = unsafeDecode <$> BSL.readFile jsonPath
+  where
+    unsafeDecode = leftError . eitherDecode
+    leftError = either error id
