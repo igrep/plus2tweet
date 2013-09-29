@@ -60,14 +60,13 @@ instance FromJSON Activity where
     o .: "object"
 
 data ActivityObject = ActivityObject
-  { activityObjectId :: Text
-  , objectType :: Text
+  { objectType :: Text
   , content :: Text
   , originalContent :: Maybe Text }
   deriving ( Read, Show )
 
 instance FromJSON ActivityObject where
-  parseJSON (Object o) = ActivityObject <$> o .: "id" <*> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
+  parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
 
 data Verb = Post | Share deriving (Read, Show)
 
