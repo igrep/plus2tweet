@@ -5,7 +5,7 @@ module GooglePlus.Activity
   , getPublicActivity
   , ActivitiesList(..)
   , Activity(..)
-  , Verb(..)
+  , Verb
   , ActivityObject(..))
 where
 
@@ -68,10 +68,7 @@ data ActivityObject = ActivityObject
 instance FromJSON ActivityObject where
   parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
 
-data Verb = Post | Share deriving (Read, Show)
-
-instance FromJSON Verb where
-  parseJSON (String s) = return $ read $ Text.unpack s
+type Verb = Text
 
 withKey :: ApiKey -> String -> String
 withKey apiKey url = url ++ "?key=" ++ apiKey
