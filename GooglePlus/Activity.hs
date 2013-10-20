@@ -5,6 +5,7 @@ module GooglePlus.Activity
   , getPublicActivity
   , ActivitiesList(..)
   , Activity(..)
+  , convertToOriginalContent
   , Verb
   , ActivityObject(..))
 where
@@ -67,6 +68,9 @@ data ActivityObject = ActivityObject
 
 instance FromJSON ActivityObject where
   parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
+
+convertToOriginalContent :: Text -> Text
+convertToOriginalContent = undefined
 
 type Verb = Text
 

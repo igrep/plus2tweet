@@ -1,6 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module GooglePlus.ActivitySpec where
 
-import GooglePlus.Activity
+import GooglePlus.Activity ( convertToOriginalContent )
+
+import Data.Text as Text
+import Data.Text ()
 
 import Test.Hspec
 import Test.Hspec.QuickCheck
@@ -14,7 +19,7 @@ main = hspec $ do
         let content = s1 ++ "<b>" ++ s2 ++ "</b>" ++ s3
             originalContent = s1 ++ "*" ++ s2 ++ "*" ++ s3
         in
-        convertToOriginalContent content == originalContent
+        convertToOriginalContent ( Text.pack content ) == Text.pack originalContent
 
 hasNoLt :: String -> Bool
 hasNoLt s = not $ '<' `elem` s
