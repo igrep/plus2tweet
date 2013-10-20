@@ -10,8 +10,9 @@ module GooglePlus.Activity
   , ActivityObject(..))
 where
 
-import Data.Text as Text
-import Data.Text ()
+import Data.Text (Text)
+
+import Data.Attoparsec.Text
 
 import Data.ByteString.Lazy as BSL
 import Data.Time.Clock (UTCTime)
@@ -71,6 +72,35 @@ instance FromJSON ActivityObject where
 
 convertToOriginalContent :: Text -> Text
 convertToOriginalContent = undefined
+
+replace :: Text -> Text -> Parser Text
+replace s1 s2 = string s1 >> return s2
+
+beginB :: Parser Text
+beginB = replace "<b>" "*"
+endB :: Parser Text
+endB = replace "</b>" "*"
+
+beginI :: Parser Text
+beginI = replace "<i>" "_"
+endI :: Parser Text
+endI = replace "</i>" "_"
+
+beginS :: Parser Text
+beginS = replace "<s>" "-"
+endS :: Parser Text
+endS = replace "</s>" "-"
+
+br :: Parser Text
+br = replace "<br />" "\n"
+
+data ActivityContentElement
+  = PlainText Text
+  | BeginA | EndA
+  | BeginB | EndB
+  | BeginI | EndI
+  | BeginS | EndS
+  | BreakLine
 
 type Verb = Text
 
