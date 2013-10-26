@@ -94,6 +94,21 @@ endS = replace "</s>" "-"
 br :: Parser Text
 br = replace "<br />" "\n"
 
+andAmp :: Parser Text
+andAmp = replace "&amp;" "&"
+
+andQuot :: Parser Text
+andQuot = replace "&quot;" "\""
+
+and39 :: Parser Text
+and39 = replace "&#39;" "'"
+
+andLt :: Parser Text
+andLt = replace "&lt;" "<"
+
+andGt :: Parser Text
+andGt = replace "&gt;" ">"
+
 data ActivityContentElement
   = PlainText Text
   | BeginA | EndA
