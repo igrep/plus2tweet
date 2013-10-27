@@ -16,7 +16,7 @@ import Data.Attoparsec.Text
 
 import Data.ByteString.Lazy as BSL
 import Data.Time.Clock (UTCTime)
-import Control.Applicative ( (<$>), (<*>) )
+import Control.Applicative ( (<$>), (<*>), (*>) )
 
 import Data.Aeson
 import Network.HTTP.Conduit
@@ -74,7 +74,7 @@ convertToOriginalContent :: Text -> Text
 convertToOriginalContent = undefined
 
 replace :: Text -> Text -> Parser Text
-replace s1 s2 = string s1 >> return s2
+replace s1 s2 = string s1 *> return s2
 
 beginB :: Parser Text
 beginB = replace "<b>" "*"
