@@ -109,14 +109,6 @@ andLt = replace "&lt;" "<"
 andGt :: Parser Text
 andGt = replace "&gt;" ">"
 
-data ActivityContentElement
-  = PlainText Text
-  | BeginA | EndA
-  | BeginB | EndB
-  | BeginI | EndI
-  | BeginS | EndS
-  | BreakLine
-
 type Verb = Text
 
 withKey :: ApiKey -> String -> String
