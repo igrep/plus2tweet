@@ -16,7 +16,7 @@ import Data.Attoparsec.Text
 
 import Data.ByteString.Lazy as BSL
 import Data.Time.Clock (UTCTime)
-import Control.Applicative ( (<$>), (<*>), (*>) )
+import Control.Applicative ( (<$>), (<*>), (*>), (<|>) )
 
 import Data.Aeson
 import Network.HTTP.Conduit
@@ -71,10 +71,26 @@ instance FromJSON ActivityObject where
   parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
 
 convertToOriginalContent :: Text -> Text
-convertToOriginalContent = undefined
+convertToOriginalContent t = result
+  where
+    (Right result) = parseOnly replacer t
+    replacer =
+          beginB
+      <|> endB
+      <|> beginI
+      <|> endI
+      <|> beginS
+      <|> endS
+      <|> br
+      <|> andAmp
+      <|> andQuot
+      <|> and39
+      <|> andLt
+      <|> andGt
+      <|> takeText
 
 replace :: Text -> Text -> Parser Text
-replace s1 s2 = string s1 *> return s2
+replace s1 s2 = try ( string s1 ) *> return s2
 
 beginB :: Parser Text
 beginB = replace "<b>" "*"
