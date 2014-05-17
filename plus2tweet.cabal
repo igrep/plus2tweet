@@ -16,35 +16,38 @@ source-repository head
   type: git
   location: https://github.com/igrep/plus2tweet.git
 
-executable test
-  buildable: True
+library
   ghc-options: -Wall
-  main-is: test.hs
-
+  exposed-modules:
+      GooglePlus.Activity
   build-depends:
       base >= 4.0
     , Cabal >= 1.18
-    , transformers >= 0.2.2
-    , lifted-base >= 0.1
-    , monad-control >= 0.3
-    , authenticate-oauth >= 1.3
-    , resourcet >= 0.3
-    , conduit == 1.0.7.3
-    , failure >= 0.2
-    , http-types
+    , attoparsec >= 0.10
+    , mtl
+    , containers
+    , conduit
+    , bytestring >= 0.9
+    , text >= 0.11
     , http-conduit == 1.9.4.4
     , aeson >= 0.6
     , yaml
     , attoparsec >= 0.10
     , attoparsec-conduit >= 0.5
-    , data-default >= 0.3
-    , bytestring >= 0.9
-    , text >= 0.11
     , time >= 1.4
     , containers
     , hxt
     , twitter-types
     , twitter-conduit
+    , http-types
+
+--executable test
+  --buildable: True
+  --ghc-options: -Wall
+  --main-is: test.hs
+
+  --build-depends:
+    --, 
 
 test-suite spec
   type:           exitcode-stdio-1.0
