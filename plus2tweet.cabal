@@ -24,22 +24,14 @@ library
       base >= 4.0
     , Cabal >= 1.18
     , attoparsec >= 0.10
-    , mtl
-    , containers
-    , conduit
     , bytestring >= 0.9
     , text >= 0.11
     , http-conduit
     , aeson >= 0.6
-    , yaml
     , attoparsec >= 0.10
-    , attoparsec-conduit >= 0.5
     , time >= 1.4
-    , containers
-    , hxt
-    , twitter-types
-    , twitter-conduit
-    , http-types
+--  , twitter-types
+--  , twitter-conduit
 
 executable test-api
   buildable: True
@@ -58,6 +50,7 @@ executable test-api
     , http-conduit
     , time >= 1.4
     , attoparsec >= 0.10
+    , plus2tweet
 
 test-suite spec
   type:           exitcode-stdio-1.0
@@ -72,3 +65,4 @@ test-suite spec
     , QuickCheck
     , text >= 0.11
     , plus2tweet
+    , TraceUtils
