@@ -90,7 +90,7 @@ convertToOriginalContent t = result
       <|> takeText
 
 replace :: Text -> Text -> Parser Text
-replace s1 s2 = try ( string s1 ) *> return s2
+replace s1 s2 = string s1 *> return s2
 
 beginB :: Parser Text
 beginB = replace "<b>" "*"
