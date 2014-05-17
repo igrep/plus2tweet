@@ -10,13 +10,13 @@ module GooglePlus.Activity
   , ActivityObject(..))
 where
 
-import Data.Text (Text)
-
 import Data.Attoparsec.Text
 
-import Data.ByteString.Lazy as BSL
+import qualified Data.ByteString.Lazy as BSL
+import qualified Data.Text as T
+import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
-import Control.Applicative ( (<$>), (<*>), (*>), (<|>) )
+import Control.Applicative ( (<$>), (<*>), (*>), (<*), (<|>), many )
 
 import Data.Aeson
 import Network.HTTP.Conduit
@@ -70,10 +70,10 @@ data ActivityObject = ActivityObject
 instance FromJSON ActivityObject where
   parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
 
-convertToOriginalContent :: Text -> Text
-convertToOriginalContent t = result
+convertToOriginalContent :: Text -> Either String Text
+convertToOriginalContent t = T.concat <$> result
   where
-    (Right result) = parseOnly replacer t
+    result = parseOnly (many replacer <* endOfInput) t
     replacer =
           beginB
       <|> endB
@@ -87,7 +87,7 @@ convertToOriginalContent t = result
       <|> and39
       <|> andLt
       <|> andGt
-      <|> takeText
+      <|> takeWhile1 (not . (`elem` "<&"))
 
 replace :: Text -> Text -> Parser Text
 replace s1 s2 = string s1 *> return s2

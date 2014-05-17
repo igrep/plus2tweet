@@ -4,7 +4,7 @@ module GooglePlus.ActivitySpec where
 
 import GooglePlus.Activity ( convertToOriginalContent )
 
-import Data.Text as Text
+import qualified Data.Text as Text
 import Data.Text ()
 
 import Test.Hspec
@@ -15,11 +15,11 @@ spec :: Spec
 spec = do
   describe "convertToOriginalContent" $ do
     prop "convert <b> to aseterisk" $ \ s1 s2 s3 ->
-      hasNoLt s1 && hasNoLt s2 && hasNoLt s3 ==>
+      hasNoLtAmp s1 && hasNoLtAmp s2 && hasNoLtAmp s3 ==>
         let content = s1 ++ "<b>" ++ s2 ++ "</b>" ++ s3
             originalContent = s1 ++ "*" ++ s2 ++ "*" ++ s3
         in
-        convertToOriginalContent ( Text.pack content ) == Text.pack originalContent
+        convertToOriginalContent ( Text.pack content ) == (Right $ Text.pack originalContent)
 
-hasNoLt :: String -> Bool
-hasNoLt s = not $ '<' `elem` s
+hasNoLtAmp :: String -> Bool
+hasNoLtAmp = not . any (`elem` "<&")
