@@ -34,6 +34,7 @@ executable test
     , http-types
     , http-conduit == 1.9.4.4
     , aeson >= 0.6
+    , yaml
     , attoparsec >= 0.10
     , attoparsec-conduit >= 0.5
     , data-default >= 0.3
@@ -41,5 +42,6 @@ executable test
     , text >= 0.11
     , time >= 1.4
     , containers
+    , hxt
     , twitter-types
     , twitter-conduit

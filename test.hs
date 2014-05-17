@@ -22,6 +22,7 @@ main = do
     exec "parse-c" = tryParseContent
     exec "e-content" = tryExtractContentWith TIO.putStrLn
     exec "e-content-show" = tryExtractContentWith print
+    exec "tw" = tryTweet
     exec other = error $ "Undifiend command: " ++ other
 
 tryDownload :: [FilePath] -> IO ()
@@ -42,6 +43,10 @@ tryParseContent args = do
 tryExtractContentWith :: ( Text -> IO() ) -> [FilePath] -> IO ()
 tryExtractContentWith printer args =
   mapM_ ( printer . content . activityObject ) =<< items <$> loadActivitiesList ( head args )
+
+tryTweet :: [String] -> IO ()
+tryTweet args = do
+  undefined
 
 loadActivitiesList :: FilePath -> IO ActivitiesList
 loadActivitiesList jsonPath = unsafeDecode <$> BSL.readFile jsonPath
