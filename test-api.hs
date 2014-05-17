@@ -1,5 +1,3 @@
-module Main where
-
 import GooglePlus.Activity
 import Settings
 

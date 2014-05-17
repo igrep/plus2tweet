@@ -29,7 +29,7 @@ library
     , conduit
     , bytestring >= 0.9
     , text >= 0.11
-    , http-conduit == 1.9.4.4
+    , http-conduit
     , aeson >= 0.6
     , yaml
     , attoparsec >= 0.10
@@ -41,13 +41,23 @@ library
     , twitter-conduit
     , http-types
 
---executable test
-  --buildable: True
-  --ghc-options: -Wall
-  --main-is: test.hs
+executable test-api
+  buildable: True
+  ghc-options: -Wall
+  main-is: test-api.hs
 
-  --build-depends:
-    --, 
+  build-depends:
+      base >= 4.0
+    , Cabal >= 1.18
+    , text >= 0.11
+    , bytestring >= 0.9
+    , hxt
+    , aeson >= 0.6
+    , yaml
+    , plus2tweet
+    , http-conduit
+    , time >= 1.4
+    , attoparsec >= 0.10
 
 test-suite spec
   type:           exitcode-stdio-1.0
