@@ -19,7 +19,7 @@ spec = do
         let content = s1 ++ "<b>" ++ s2 ++ "</b>" ++ s3
             originalContent = s1 ++ "*" ++ s2 ++ "*" ++ s3
         in
-        convertToOriginalContent ( Text.pack content ) == (Right $ Text.pack originalContent)
+        convertToOriginalContent ( Text.pack content ) `shouldBe` (Right $ Text.pack originalContent)
 
 hasNoLtAmp :: String -> Bool
 hasNoLtAmp = not . any (`elem` "<&")
