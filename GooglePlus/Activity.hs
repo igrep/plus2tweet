@@ -121,9 +121,9 @@ endI :: Parser Text
 endI = replace "</i>" "_"
 
 beginS :: Parser Text
-beginS = replace "<s>" "-"
+beginS = replace "<del>" "-"
 endS :: Parser Text
-endS = replace "</s>" "-"
+endS = replace "</del>" "-"
 
 br :: Parser Text
 br = replace "<br />" "\n"
