@@ -8,6 +8,7 @@ import Data.ByteString as ByteString
 import Control.Applicative
   ( (<$>)
   )
+import Control.Monad
 
 import Data.Yaml
 
@@ -21,6 +22,7 @@ instance FromJSON Settings where
     uId <- show <$> ( o .: "userId" :: Parser Integer )
     aKey <- o .: "apiKey"
     return $ Settings uId aKey
+  parseJSON _ = mzero
 
 loadSettings :: FilePath -> IO (Either String Settings)
 loadSettings fp = decodeEither <$> ByteString.readFile fp

@@ -17,6 +17,7 @@ import qualified Data.Text as T
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 import Control.Applicative ( (<$>), (<*>), (*>), (<*), (<|>), many )
+import Control.Monad (mzero)
 
 import Data.Aeson
 import Network.HTTP.Conduit
@@ -44,6 +45,7 @@ instance FromJSON ActivitiesList where
     o .: "nextPageToken" <*>
     o .: "updated"       <*>
     o .: "items"
+  parseJSON _ = mzero
 
 data Activity = Activity
   { activityId :: Text
@@ -60,6 +62,7 @@ instance FromJSON Activity where
     o .: "verb"      <*>
     o .: "published" <*>
     o .: "object"
+  parseJSON _ = mzero
 
 data ActivityObject = ActivityObject
   { objectType :: Text
@@ -69,6 +72,7 @@ data ActivityObject = ActivityObject
 
 instance FromJSON ActivityObject where
   parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
+  parseJSON _ = mzero
 
 convertToOriginalContent :: Text -> Either String Text
 convertToOriginalContent t = T.concat <$> result
