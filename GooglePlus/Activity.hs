@@ -99,6 +99,8 @@ convertToOriginalContent t = T.concat <$> result
       <|> endI
       <|> beginS
       <|> endS
+      <|> beginA
+      <|> endA
       <|> br
       <|> andAmp
       <|> andQuot
@@ -124,6 +126,11 @@ beginS :: Parser Text
 beginS = replace "<del>" "-"
 endS :: Parser Text
 endS = replace "</del>" "-"
+
+beginA :: Parser Text
+beginA = string "<a" >> many (notChar '>') >> char '>' >> return ""
+endA :: Parser Text
+endA = replace "</a>" ""
 
 br :: Parser Text
 br = replace "<br />" "\n"

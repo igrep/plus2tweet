@@ -21,5 +21,13 @@ spec = do
         in
         convertToOriginalContent ( Text.pack content ) `shouldBe` (Right $ Text.pack originalContent)
 
+    it "strips <a> around a URL" $
+      convertToOriginalContent "<a href=\"http://www.example.com\">http://www.example.com</a> is an example URL"
+        `shouldBe` (Right "http://www.example.com is an example URL")
+
+    it "strips <a> around a hashtag" $
+      convertToOriginalContent "This is a test <a rel=\"nofollow\" class=\"ot-hashtag\" href=\"https://plus.google.com/s/%23thisisatest\">#thisisatest</a>"
+        `shouldBe` (Right "This is a test #thisisatest")
+
 hasNoLtAmp :: String -> Bool
 hasNoLtAmp = not . any (`elem` "<&")
