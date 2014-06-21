@@ -20,6 +20,7 @@ import Control.Applicative ( (<$>), (<*>), (*>), (<*), (<|>), many )
 import Control.Monad (mzero)
 
 import Data.Aeson
+import qualified Data.Aeson.Types as A
 import Network.HTTP.Conduit
 
 endpointRoot :: String
@@ -70,12 +71,22 @@ instance FromJSON Activity where
 data ActivityObject = ActivityObject
   { objectType :: Text
   , content :: Text
-  , originalContent :: Maybe Text }
+  , originalContent :: Either String Text }
   deriving ( Read, Show )
 
 instance FromJSON ActivityObject where
-  parseJSON (Object o) = ActivityObject <$> o .: "objectType" <*> o .: "content" <*> o .:? "originalContent"
+  parseJSON (Object o) = do
+    t <- o .: "objectType"
+    c <- o .: "content"
+    oc <- o .: "originalContent" <|> convertToOriginalContentForJsonParser c <|> return (Left $ T.unpack c)
+    return $ ActivityObject t c oc
   parseJSON _ = mzero
+
+convertToOriginalContentForJsonParser :: Text -> A.Parser (Either String Text)
+convertToOriginalContentForJsonParser = toJsonParser . convertToOriginalContent
+  where
+    toJsonParser (Left s) = fail s
+    toJsonParser r = return r
 
 convertToOriginalContent :: Text -> Either String Text
 convertToOriginalContent t = T.concat <$> result
