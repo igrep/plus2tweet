@@ -22,13 +22,16 @@ import Control.Monad (mzero)
 import Data.Aeson
 import Network.HTTP.Conduit
 
+endpointRoot :: String
+endpointRoot = "https://www.googleapis.com/plus/v1"
+
 getPublicActivitiesList :: ApiKey -> UserID -> IO BSL.ByteString
 getPublicActivitiesList apiKey userId =
-  simpleHttp $ withKey apiKey $ "https://www.googleapis.com/plus/v1/people/" ++ userId ++ "/activities/public"
+  simpleHttp $ withKey apiKey $ endpointRoot ++ "/people/" ++ userId ++ "/activities/public"
 
 getPublicActivity :: ApiKey -> ActivityID -> IO BSL.ByteString
 getPublicActivity aKey aId =
-  simpleHttp $ withKey aKey $ "https://www.googleapis.com/plus/v1/activities/" ++ aId
+  simpleHttp $ withKey aKey $ endpointRoot ++ "/activities/" ++ aId
 
 type ApiKey = String
 type UserID = String
