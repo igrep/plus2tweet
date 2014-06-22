@@ -30,8 +30,8 @@ library
     , aeson >= 0.6
     , attoparsec >= 0.10
     , time >= 1.4
---  , twitter-types
---  , twitter-conduit
+    , twitter-types
+    , twitter-conduit
 
 executable test-api
   buildable: True
@@ -65,4 +65,3 @@ test-suite spec
     , QuickCheck
     , text >= 0.11
     , plus2tweet
-    , TraceUtils
