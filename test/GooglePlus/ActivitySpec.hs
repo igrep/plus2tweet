@@ -19,6 +19,7 @@ spec = do
         let content = s1 ++ "<b>" ++ s2 ++ "</b>" ++ s3
             originalContent = s1 ++ "*" ++ s2 ++ "*" ++ s3
         in
+        -- DO NOT try to get rid of String: Text is not an Arbitrary so far.
         convertToOriginalContent ( Text.pack content ) `shouldBe` (Just $ Text.pack originalContent)
 
     it "strips <a> around a URL" $
