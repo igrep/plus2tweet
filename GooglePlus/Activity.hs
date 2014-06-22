@@ -6,11 +6,10 @@ module GooglePlus.Activity
   , ActivitiesList(..)
   , Activity(..)
   , convertToOriginalContent
+  , getOriginalContent
   , Verb
   , ActivityObject(..))
 where
-
-import Data.Attoparsec.Text
 
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.Text as T
@@ -19,8 +18,8 @@ import Data.Time.Clock (UTCTime)
 import Control.Applicative ( (<$>), (<*>), (*>), (<*), (<|>), many )
 import Control.Monad (mzero)
 
+import Data.Attoparsec.Text
 import Data.Aeson
-import qualified Data.Aeson.Types as A
 import Network.HTTP.Conduit
 
 endpointRoot :: String
@@ -71,27 +70,24 @@ instance FromJSON Activity where
 data ActivityObject = ActivityObject
   { objectType :: Text
   , content :: Text
-  , originalContent :: Either String Text }
+  , originalContent :: Maybe Text }
   deriving ( Read, Show )
+
+getOriginalContent :: ActivityObject -> Either Text Text
+getOriginalContent ao = maybe (Left $ content ao) Right (originalContent ao)
 
 instance FromJSON ActivityObject where
   parseJSON (Object o) = do
     t <- o .: "objectType"
     c <- o .: "content"
-    oc <- o .: "originalContent" <|> convertToOriginalContentForJsonParser c <|> return (Left $ T.unpack c)
+    oc <- o .: "originalContent" <|> return (convertToOriginalContent c)
     return $ ActivityObject t c oc
   parseJSON _ = mzero
 
-convertToOriginalContentForJsonParser :: Text -> A.Parser (Either String Text)
-convertToOriginalContentForJsonParser = toJsonParser . convertToOriginalContent
-  where
-    toJsonParser (Left s) = fail s
-    toJsonParser r = return r
-
-convertToOriginalContent :: Text -> Either String Text
+convertToOriginalContent :: Text -> Maybe Text
 convertToOriginalContent t = T.concat <$> result
   where
-    result = parseOnly (many replacer <* endOfInput) t
+    result = maybeResult $ feedEmpty $ parse (many replacer <* endOfInput) t
     replacer =
           beginB
       <|> endB
@@ -108,6 +104,7 @@ convertToOriginalContent t = T.concat <$> result
       <|> andLt
       <|> andGt
       <|> takeWhile1 (not . (`elem` "<&"))
+    feedEmpty = (flip feed) ""
 
 replace :: Text -> Text -> Parser Text
 replace s1 s2 = string s1 *> return s2

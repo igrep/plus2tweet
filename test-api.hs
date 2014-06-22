@@ -11,7 +11,6 @@ import System.Environment ( getArgs )
 import Control.Applicative ( (<$>) )
 import qualified Data.Text.IO as TIO
 import Data.Text ( Text )
-import qualified Data.Text as T
 import Data.Monoid
 
 main :: IO ()
@@ -49,7 +48,7 @@ tryExtractWith prop printer args =
   mapM_ ( printer . prop . activityObject ) =<< items <$> loadActivitiesList ( head args )
 
 showOriginalContent :: ActivityObject -> Text
-showOriginalContent = formatEither . originalContent
+showOriginalContent = formatEither . getOriginalContent
 
 tryTweet :: [String] -> IO ()
 tryTweet args = do
@@ -64,6 +63,6 @@ unsafeDecode = leftError . eitherDecode
 leftError :: Either String a -> a
 leftError = either error id
 
-formatEither :: Either String Text -> Text
-formatEither (Left s) = T.pack $ "Left: " <> s
+formatEither :: Either Text Text -> Text
+formatEither (Left  t) = "Left: "  <> t
 formatEither (Right t) = "Right: " <> t
