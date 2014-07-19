@@ -2,6 +2,7 @@
 
 import GooglePlus.Activity
 import Settings
+import qualified Settings.GooglePlus as GooglePlus
 
 import Data.Aeson ( eitherDecode, FromJSON )
 import qualified Text.XML.HXT.Core as HXT
@@ -30,7 +31,7 @@ main = do
 
 tryDownload :: [FilePath] -> IO ()
 tryDownload args = do
-  Right ( Settings uId aKey ) <- loadSettings $ head args
+  Right (Settings (GooglePlus.Settings uId aKey)) <- loadSettings $ head args
   getPublicActivitiesList aKey uId >>= BSL.putStr
 
 tryParseJSON :: [FilePath] -> IO ()
