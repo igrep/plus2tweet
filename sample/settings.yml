@@ -1,3 +1,8 @@
 GooglePlus:
   userId: <your google+ account's user id>
   apiKey: <your api key>
+Twitter:
+  consumerKey: <your twitter app's consumer key>
+  consumerSecret: <your twitter app's consumer secret>
+  accessKey: <your twitter account's access key>
+  accessToken: <your twitter account's access token>
