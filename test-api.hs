@@ -26,7 +26,7 @@ main = do
     exec "e-ocontent" = tryExtractWith showOriginalContent TIO.putStrLn
     exec "e-ocontent-show" = tryExtractWith showOriginalContent print
     exec "tw" = tryTweet
-    exec other = error $ "Undifiend command: " ++ other
+    exec other = error $ "Undefined command: " ++ other
 
 tryDownload :: [FilePath] -> IO ()
 tryDownload args = do
