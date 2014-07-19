@@ -1,11 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import GooglePlus.Activity
+import Twitter.Authentication
+
 import Settings
 import qualified Settings.GooglePlus as GooglePlus
+import qualified Settings.Twitter as Twitter
 
 import Data.Aeson ( eitherDecode, FromJSON )
 import qualified Text.XML.HXT.Core as HXT
+import qualified Web.Authenticate.OAuth as OA
 
 import qualified Data.ByteString.Lazy as BSL
 import System.Environment ( getArgs )
@@ -27,11 +31,12 @@ main = do
     exec "e-ocontent" = tryExtractWith showOriginalContent TIO.putStrLn
     exec "e-ocontent-show" = tryExtractWith showOriginalContent print
     exec "tw" = tryTweet
+    exec "tw-akey" = tryGetTwitterAccessKey
     exec other = error $ "Undefined command: " ++ other
 
 tryDownload :: [FilePath] -> IO ()
 tryDownload args = do
-  Right (Settings (GooglePlus.Settings uId aKey)) <- loadSettings $ head args
+  Right (Settings (GooglePlus.Settings uId aKey) _) <- loadSettings $ head args
   getPublicActivitiesList aKey uId >>= BSL.putStr
 
 tryParseJSON :: [FilePath] -> IO ()
@@ -54,6 +59,12 @@ showOriginalContent = formatEither . getOriginalContent
 tryTweet :: [String] -> IO ()
 tryTweet args = do
   undefined
+
+tryGetTwitterAccessKey :: [String] -> IO ()
+tryGetTwitterAccessKey args = do
+  Right (Settings _ (Twitter.Settings cKey cSecret _ _)) <- loadSettings $ head args
+  OA.Credential cred <- getCredential cKey cSecret
+  print cred
 
 loadActivitiesList :: FilePath -> IO ActivitiesList
 loadActivitiesList jsonPath = unsafeDecode <$> BSL.readFile jsonPath

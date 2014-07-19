@@ -20,6 +20,7 @@ library
   ghc-options: -Wall
   exposed-modules:
       GooglePlus.Activity
+      Twitter.Authentication
   build-depends:
       base >= 4.0
     , Cabal >= 1.18
@@ -32,6 +33,8 @@ library
     , time >= 1.4
     , twitter-types
     , twitter-conduit
+    , transformers >= 0.4
+    , authenticate-oauth >= 1.5
 
 executable test-api
   buildable: True
@@ -50,6 +53,10 @@ executable test-api
     , http-conduit
     , time >= 1.4
     , attoparsec >= 0.10
+    , twitter-conduit
+    , transformers >= 0.4
+    , authenticate-oauth >= 1.5
+    , http-client >= 0.3
     , plus2tweet
 
 test-suite spec
